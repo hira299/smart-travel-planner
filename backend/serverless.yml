@@ -20,7 +20,8 @@ provider:
   httpApi:
     cors:
       allowedOrigins:
-        - '*'
+        - 'http://localhost:3000'
+        - 'https://your-domain.com'  # Replace with your actual domain
       allowedHeaders:
         - Content-Type
         - X-Amz-Date

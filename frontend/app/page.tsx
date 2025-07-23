@@ -43,7 +43,6 @@ export default function Page() {
           'Accept': 'application/json',
         },
         body: JSON.stringify({ 
-          userId: 'user123', // You might want to implement proper user authentication
           destination, 
           dates, 
           budget, 
