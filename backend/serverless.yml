@@ -1,0 +1,73 @@
+service: ai-trip-planner
+
+provider:
+  name: aws
+  runtime: python3.12
+  region: us-east-1
+  stage: ${opt:stage, 'dev'}
+  environment:
+    DYNAMO_DB_TABLE: ${self:service}-${self:provider.stage}-trips
+    GEMINI_API_KEY: ${env:GEMINI_API_KEY}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:PutItem
+            - dynamodb:GetItem
+            - dynamodb:Query
+          Resource: !GetAtt TripsTable.Arn
+  httpApi:
+    cors:
+      allowedOrigins:
+        - '*'
+      allowedHeaders:
+        - Content-Type
+        - X-Amz-Date
+        - Authorization
+        - X-Api-Key
+        - X-Amz-Security-Token
+        - X-Amz-User-Agent
+      allowedMethods:
+        - POST
+        - OPTIONS
+      allowCredentials: false
+
+functions:
+  createItinerary:
+    handler: handler.create_itinerary
+    timeout: 40
+    events:
+      - httpApi:
+          path: /trips
+          method: POST
+
+  findGems:
+    handler: handler.find_gems
+    timeout: 40
+    events:
+      - httpApi:
+          path: /gems
+          method: POST
+
+resources:
+  Resources:
+    TripsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.DYNAMO_DB_TABLE}
+        AttributeDefinitions:
+          - AttributeName: PK
+            AttributeType: S
+          - AttributeName: SK
+            AttributeType: S
+        KeySchema:
+          - AttributeName: PK
+            KeyType: HASH
+          - AttributeName: SK
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+
+plugins:
+  - serverless-python-requirements
+  - serverless-dotenv-plugin 

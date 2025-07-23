@@ -1,0 +1,4 @@
+boto3==1.38.36
+requests
+python-dotenv==1.0.0
+anthropic 
