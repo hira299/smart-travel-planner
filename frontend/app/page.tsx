@@ -36,7 +36,7 @@ export default function Page() {
     setItinerary(null);
 
     try {
-      const res = await fetch('https://29a9c99bg6.execute-api.us-east-1.amazonaws.com/trips', {
+      const res = await fetch(process.env.NEXT_PUBLIC_API_URL || 'https://29a9c99bg6.execute-api.us-east-1.amazonaws.com/trips', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

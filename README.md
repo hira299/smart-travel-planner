@@ -92,11 +92,13 @@ npm install
 
 ### 6. Configure Frontend API Endpoint
 
-Update the API endpoint in `frontend/app/page.tsx` with your deployed API Gateway URL:
-```typescript
-// Replace this URL with your deployed API Gateway URL
-const res = await fetch('YOUR_API_GATEWAY_URL/trips', {
+Create a `.env.local` file in the frontend directory:
+```bash
+# Frontend/.env.local
+NEXT_PUBLIC_API_URL=YOUR_API_GATEWAY_URL/trips
 ```
+
+**⚠️ Security Note:** Never commit API keys or endpoints directly in your code. Always use environment variables.
 
 ### 7. Run the Application
 
